@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <DIO2.h> // install the library DIO2
+#include <MIDI.h>
+
+MIDI_CREATE_DEFAULT_INSTANCE();
 
 //#define DEBUG_SCANS_PER_SECOND
 //#define DEBUG_MIDI_MESSAGE
@@ -553,7 +556,7 @@ boolean       signals[KEYS_NUMBER * 2];
 boolean       pedal_enabled;
 
 void setup() {
-    Serial.begin(115200);
+    //Serial.begin(115200);
     pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
     int i;
@@ -596,9 +599,16 @@ void send_midi_event(byte status_byte, byte key_index, unsigned long time)
     sprintf(out, "%02X %02d %03d %d", status_byte, key, vel, time);
     Serial.println(out);
 #else
-    Serial.write(status_byte);
-    Serial.write(key);
-    Serial.write(vel);
+    //START PRESS
+    if(status_byte == 0x90){
+      MIDI.sendNoteOn(key, vel, 1);
+    } //STOP PRESS
+    else if(status_byte == 0x80){
+      MIDI.sendNoteOff(key, vel, 1);
+    }
+    //Serial.write(status_byte);
+    //Serial.write(key);
+    //Serial.write(vel);
 #endif
 }
 
