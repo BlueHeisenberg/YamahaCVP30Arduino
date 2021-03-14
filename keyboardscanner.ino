@@ -557,6 +557,7 @@ boolean       pedal_enabled;
 
 void setup() {
     //Serial.begin(115200);
+    MIDI.begin(MIDI_CHANNEL_OMNI);
     pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
     int i;
