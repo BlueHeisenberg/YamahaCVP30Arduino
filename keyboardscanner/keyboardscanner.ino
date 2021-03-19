@@ -594,7 +594,7 @@ void send_midi_event(byte status_byte, byte key_index, unsigned long time)
     t -= MIN_TIME_MS;
     unsigned long velocity = 127 - (t * 127 / MAX_TIME_MS_N);
     byte vel = (((velocity * velocity) >> 7) * velocity) >> 7;
-    byte key = 33 + key_index;
+    byte key = 33 + key_index - 12;
 #ifdef DEBUG_MIDI_MESSAGE
     char out[32];
     sprintf(out, "%02X %02d %03d %d", status_byte, key, vel, time);
