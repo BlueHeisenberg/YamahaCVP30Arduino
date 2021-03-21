@@ -39,7 +39,8 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 #define MAX_TIME_MS   50
 #define MAX_TIME_MS_N (MAX_TIME_MS - MIN_TIME_MS)
 
-#define PEDAL_PIN     99
+#define PEDAL_R_PIN     6
+#define PEDAL_L_PIN     7
 
 //find out the pins using a multimeter, starting from the first key
 //see the picture key_scheme.png to understand how to map the inputs and outputs
@@ -574,8 +575,10 @@ void setup() {
     {
         pinMode(input_pins[pin], INPUT_PULLUP);
     }
-    //pinMode(PEDAL_PIN, INPUT_PULLUP);
-    pedal_enabled = false; //digitalRead(PEDAL_PIN) != HIGH;
+    pinMode(PEDAL_R_PIN, INPUT_PULLUP);
+    pinMode(PEDAL_L_PIN, INPUT_PULLUP);
+    pedal_enabled = digitalRead(PEDAL_R_PIN) != HIGH;
+    //pedal_enabled = digitalRead(PEDAL_L_PIN) != HIGH;
 }
 
 void send_midi_event(byte status_byte, byte key_index, unsigned long time)
@@ -630,7 +633,7 @@ void loop() {
     byte pedal = LOW;
     if (pedal_enabled)
     {
-        pedal = digitalRead2(PEDAL_PIN);
+        pedal = digitalRead2(PEDAL_R_PIN);
     }
    
     boolean *s = signals;
