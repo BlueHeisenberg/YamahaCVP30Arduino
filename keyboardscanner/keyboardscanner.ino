@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#define  GPIO2_PREFER_SPEED  1
+
 #include <DIO2.h> // install the library DIO2
 #include <MIDI.h>
 
@@ -39,8 +39,8 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 #define MAX_TIME_MS   50
 #define MAX_TIME_MS_N (MAX_TIME_MS - MIN_TIME_MS)
 
-#define PEDAL_R_PIN     6
-#define PEDAL_L_PIN     7
+#define PEDAL_R_PIN     A0
+#define PEDAL_L_PIN     A1
 
 //find out the pins using a multimeter, starting from the first key
 //see the picture key_scheme.png to understand how to map the inputs and outputs
@@ -559,7 +559,7 @@ boolean       pedal_enabled;
 void setup() {
     //Serial.begin(115200);
     MIDI.begin(MIDI_CHANNEL_OMNI);
-    pinMode2(13, OUTPUT);
+    pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
     int i;
     for (i = 0; i < KEYS_NUMBER; i++)
@@ -569,15 +569,15 @@ void setup() {
     }
     for (byte pin = 0; pin < sizeof(output_pins); pin++)
     {
-        pinMode2(output_pins[pin], OUTPUT);
+        pinMode(output_pins[pin], OUTPUT);
     }
     for (byte pin = 0; pin < sizeof(input_pins); pin++)
     {
-        pinMode2(input_pins[pin], INPUT_PULLUP);
+        pinMode(input_pins[pin], INPUT_PULLUP);
     }
-    pinMode2(PEDAL_R_PIN, INPUT_PULLUP);
-    pinMode2(PEDAL_L_PIN, INPUT_PULLUP);
-    pedal_enabled = digitalRead2(PEDAL_R_PIN) != HIGH;
+    //pinMode(PEDAL_R_PIN, INPUT_PULLUP);
+    //pinMode(PEDAL_L_PIN, INPUT_PULLUP);
+    pedal_enabled = true; //digitalRead(PEDAL_R_PIN) != HIGH;
     //pedal_enabled = digitalRead(PEDAL_L_PIN) != HIGH;
 }
 
@@ -630,11 +630,17 @@ void loop() {
         start = current;
     }
 #endif
+    int pedal_analog = 0;
     byte pedal = LOW;
     if (pedal_enabled)
     {
-        pedal = digitalRead2(PEDAL_R_PIN);
+        //pedal = digitalRead2(PEDAL_R_PIN);
+        pedal_analog = analogRead(PEDAL_R_PIN);
+        if(pedal_analog > 200) {
+          pedal = HIGH;
+        }
     }
+
    
     boolean *s = signals;
     for (byte i = 0; i < KEYS_NUMBER * 2; i++)
@@ -709,7 +715,7 @@ void loop() {
                 if (state_index == 0 && !*signal)
                 {
                     *state = KEY_SUSTAINED;
-                    digitalWrite2(13, HIGH);
+                    digitalWrite(13, HIGH);
                     break;
                 }
                 if (state_index == 1 && *signal)
