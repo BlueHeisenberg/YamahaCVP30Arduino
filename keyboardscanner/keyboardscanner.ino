@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#define  GPIO2_PREFER_SPEED  1
 #include <DIO2.h> // install the library DIO2
 #include <MIDI.h>
 
@@ -559,7 +559,7 @@ boolean       pedal_enabled;
 void setup() {
     //Serial.begin(115200);
     MIDI.begin(MIDI_CHANNEL_OMNI);
-    pinMode(13, OUTPUT);
+    pinMode2(13, OUTPUT);
     digitalWrite(13, LOW);
     int i;
     for (i = 0; i < KEYS_NUMBER; i++)
@@ -569,15 +569,15 @@ void setup() {
     }
     for (byte pin = 0; pin < sizeof(output_pins); pin++)
     {
-        pinMode(output_pins[pin], OUTPUT);
+        pinMode2(output_pins[pin], OUTPUT);
     }
     for (byte pin = 0; pin < sizeof(input_pins); pin++)
     {
-        pinMode(input_pins[pin], INPUT_PULLUP);
+        pinMode2(input_pins[pin], INPUT_PULLUP);
     }
-    pinMode(PEDAL_R_PIN, INPUT_PULLUP);
-    pinMode(PEDAL_L_PIN, INPUT_PULLUP);
-    pedal_enabled = digitalRead(PEDAL_R_PIN) != HIGH;
+    pinMode2(PEDAL_R_PIN, INPUT_PULLUP);
+    pinMode2(PEDAL_L_PIN, INPUT_PULLUP);
+    pedal_enabled = digitalRead2(PEDAL_R_PIN) != HIGH;
     //pedal_enabled = digitalRead(PEDAL_L_PIN) != HIGH;
 }
 
@@ -709,7 +709,7 @@ void loop() {
                 if (state_index == 0 && !*signal)
                 {
                     *state = KEY_SUSTAINED;
-                    digitalWrite(13, HIGH);
+                    digitalWrite2(13, HIGH);
                     break;
                 }
                 if (state_index == 1 && *signal)
