@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <DIO2.h> // install the library DIO2
 #include <MIDI.h>
+#include <avdweb_AnalogReadFast.h>
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
@@ -248,8 +249,6 @@ byte output_pins[] = {
     PIN_B11,
     PIN_B11,
     PIN_B11,
-
-   
      
     PIN_B12,
     PIN_B12, //C4
@@ -271,8 +270,6 @@ byte output_pins[] = {
     PIN_B13, //C5
     PIN_B13,
     PIN_B13,
-    PIN_B13,
-    PIN_B13, //C5
     
     PIN_B13,
     PIN_B13,
@@ -280,8 +277,6 @@ byte output_pins[] = {
     PIN_B13, //C5
     PIN_B13,
     PIN_B13,
-    PIN_B13,
-    PIN_B13, //C5
 
     PIN_B14,
     PIN_B14,
@@ -289,32 +284,14 @@ byte output_pins[] = {
     PIN_B14, //C5
     PIN_B14,
     PIN_B14,
-    PIN_B14,
-    PIN_B14, //C5
     
     PIN_B14,
     PIN_B14,
     PIN_B14,
     PIN_B14, //C5
     PIN_B14,
-    PIN_B14,
-    PIN_B14,
-    PIN_B14, //C5
+    PIN_B14
 
-};
-
-byte caca[]={
-  
-    PIN_B13,
-    PIN_B13,
-    PIN_B13,
-    PIN_B13, //C5
-    
-    PIN_B13,
-    PIN_B13,
-    PIN_B13,
-    PIN_B13 //C5
-    
 };
 
 byte input_pins[] = {
@@ -512,18 +489,6 @@ byte input_pins[] = {
 
 };
 
-byte caca2[] = {
-  
-    PIN_MK13,
-    PIN_MK03, //C#0
-    PIN_MK12,
-    PIN_MK02, //F#0
-    PIN_MK11,
-    PIN_MK01, //G0
-    PIN_MK10,
-    PIN_MK00 //C1
-};
-
 //cheap keyboards often has the black keys softer or harder than the white ones
 //uncomment the next line to allow a soft correction
 //#define BLACK_KEYS_CORRECTION
@@ -559,8 +524,8 @@ boolean       pedal_enabled;
 void setup() {
     //Serial.begin(115200);
     MIDI.begin(MIDI_CHANNEL_OMNI);
-    pinMode(13, OUTPUT);
-    digitalWrite(13, LOW);
+    pinMode2(13, OUTPUT);
+    digitalWrite2(13, LOW);
     int i;
     for (i = 0; i < KEYS_NUMBER; i++)
     {
@@ -569,11 +534,11 @@ void setup() {
     }
     for (byte pin = 0; pin < sizeof(output_pins); pin++)
     {
-        pinMode(output_pins[pin], OUTPUT);
+        pinMode2(output_pins[pin], OUTPUT);
     }
     for (byte pin = 0; pin < sizeof(input_pins); pin++)
     {
-        pinMode(input_pins[pin], INPUT_PULLUP);
+        pinMode2(input_pins[pin], INPUT_PULLUP);
     }
     //pinMode(PEDAL_R_PIN, INPUT_PULLUP);
     //pinMode(PEDAL_L_PIN, INPUT_PULLUP);
@@ -635,8 +600,8 @@ void loop() {
     if (pedal_enabled)
     {
         //pedal = digitalRead2(PEDAL_R_PIN);
-        pedal_analog = analogRead(PEDAL_R_PIN);
-        if(pedal_analog > 200) {
+        pedal_analog = analogReadFast(PEDAL_R_PIN);
+        if(pedal_analog > 300) {
           pedal = HIGH;
         }
     }
@@ -715,7 +680,7 @@ void loop() {
                 if (state_index == 0 && !*signal)
                 {
                     *state = KEY_SUSTAINED;
-                    digitalWrite(13, HIGH);
+                    digitalWrite2(13, HIGH);
                     break;
                 }
                 if (state_index == 1 && *signal)
