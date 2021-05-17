@@ -20,16 +20,21 @@ void setup() {
   //LEDS IN
   for(int i = 40; i <= 52; i += 2){
      pinMode2(i, OUTPUT);
-     digitalWrite2(i, HIGH);
+     digitalWrite2(i, LOW);
   }
 
-  for(int i = 2; i <= 4; i++){
+  for(int i = 2; i <= 6; i++){
      pinMode2(i, OUTPUT);
-     digitalWrite2(i, HIGH);
+     digitalWrite2(i, LOW);
   }
 
   //BUTTONS OUT
   for(int i = 39; i <= 53; i += 2){
+     pinMode2(i, OUTPUT);
+     digitalWrite2(i, LOW);
+  }
+
+  for(int i = 7; i <= 9; i++){
      pinMode2(i, OUTPUT);
      digitalWrite2(i, LOW);
   }
@@ -42,14 +47,15 @@ void setup() {
 
 void loop() {
 
-  if(num < 10){
+  /*if(num < 12){
     num++;
   } else {
     num = 0;
   }
 
+  int j = 0;
   //LEDS IN
-  for(int i = 40, j = 0; i <= 52; i += 2, j++){
+  for(int i = 40; i <= 52; i+=2, j++){
     if(j == num){
       digitalWrite2(i, LOW);
     }else{
@@ -57,13 +63,13 @@ void loop() {
     }
   }
 
-  for(int i = 2; i <= 4; i++, j++){
+  for(int i = 2; i <= 6; i++, j++){
      if(j == num){
       digitalWrite2(i, LOW);
     }else{
       digitalWrite2(i, HIGH);
     }
-  }
+  }*/
   
   /*switch(num){
     case 0:
